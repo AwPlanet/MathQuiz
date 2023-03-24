@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Math Quiz</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+  <h1>Math Quiz</h1>
+  <div id="question"></div>
+  <input type="text" id="answer" placeholder="Enter your answer...">
+  <div id="answer-btn"><button onclick="checkAnswer()">Submit</button></div>
+  <script>
+    function getRandomNumber(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function generateQuestion() {
+      var x, y, operator, question;
+      var randomOperator = getRandomNumber(1, 2);
+
+      if (randomOperator == 1) {
+        x = getRandomNumber(1, 10);
+        y = getRandomNumber(1, 10);
+        operator = "x";
+        question = x + " " + operator + " " + y;
+      } else {
+        x = getRandomNumber(1, 10);
+        y = getRandomNumber(1, 10);
+        while (x % y !== 0) {
+          x = getRandomNumber(1, 10);
+          y = getRandomNumber(1, 10);
+        }
+        operator = "÷";
+        question = x*y + " " + operator + " " + y;
+      }
+
+      document.getElementById("question").innerHTML = question;
+      document.getElementById("answer").value = "";
+      document.getElementById("answer").focus();
+    }
+
+    function checkAnswer() {
+      var answer = document.getElementById("answer").value;
+      var question = document.getElementById("question").innerHTML;
+      var result;
+      if (question.indexOf("x") > -1) {
+        result = eval(question.replace("x", "*"));
+      } else {
+        result = eval(question.replace("÷", "/"));
+      }
+
+      if (answer == result) {
+        document.body.innerHTML += "<div class='correct'>Correct!</div>";
+      } else {
+        document.body.innerHTML += "<div class='incorrect'>Incorrect, the answer is " + result + "</div>";
+      }
+      generateQuestion();
+    }
+
+    generateQuestion();
+  </script>
+</body>
+</html>
